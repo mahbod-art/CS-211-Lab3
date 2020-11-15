@@ -3,7 +3,7 @@
  *
  *   Programmed by Michael J. Quinn
  *
- *   Last modification: 7 September 2001
+ *   Last modification: 7 September 2001 
  */
 
 #include "mpi.h"
