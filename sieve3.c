@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
          {
             m[i] = 1;
          }
-         while (local_prime_m[++index])u;
+         while (local_prime_m[++index]);
          prime = 2 * index + 3;
       } while (prime * prime <= n);
    }
