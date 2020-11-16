@@ -63,13 +63,9 @@ main(int argc, char *argv[])
    HighVal = 2 + ((long int)(id + 1) * (long int)(n - 1) / (long int)p) - 1;
 
    if (LowVal % 2 == 0)
-   {
       LowVal = LowVal + 1;
-   }
    if (HighVal % 2 == 0)
-   {
       HighVal = HighVal - 1;
-   }
 
    size = 1 + ((HighVal - LowVal) / 2);
 
@@ -81,9 +77,8 @@ main(int argc, char *argv[])
       exit(1);
    }
    for (i = 0; i < size; i++)
-   {
       m[i] = 0;
-   }
+
    local_prime_size = (long long int)sqrt(n) / 2;
    local_prime_m = (char *)malloc(local_prime_size);
 
@@ -115,8 +110,7 @@ main(int argc, char *argv[])
       }
       for (i = first; i < size; i += prime)
          m[i] = 1;
-      while (local_prime_m[++index])
-         ;
+      while (local_prime_m[++index]);
       prime = index * 2 + 3;
 
    } while (prime * prime <= n);

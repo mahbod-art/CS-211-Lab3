@@ -50,15 +50,11 @@ int main(int argc, char *argv[])
 
    LowVal = 2 * BLOCK_LOW(id, p, (n - 3) / 2 + 1) + 3;
    if (LowVal % 2 == 0)
-   {
       LowVal = LowVal + 1;
-   }
    HighVal = 2 * BLOCK_HIGH(id, p, (n - 3) / 2 + 1) + 3;
 
    if (HighVal % 2 == 0)
-   {
       HighVal = HighVal - 1;
-   }
    size = ((id + 1) * ((n - 3) / 2 + 1) / (p)) - ((id) * ((n - 3) / 2 + 1) / (p));
 
    m = (char *)malloc(size);
@@ -71,9 +67,7 @@ int main(int argc, char *argv[])
    }
    local_prime_size = ((sqrt(n) - 3) / 2) + 1;
    for (i = 0; i < size; i++)
-   {
       m[i] = 0;
-   }
    local_prime_m = (char *)malloc(((sqrt(n) - 3) / 2) + 1);
    for (i = 0; i < local_prime_size; i++)
       local_prime_m[i] = 0;
@@ -82,8 +76,7 @@ int main(int argc, char *argv[])
    {
       for (i = (prime * prime - 3) / 2; i < local_prime_size; i += prime)
          local_prime_m[i] = 1;
-      while (local_prime_m[++index])
-         ;
+      while (local_prime_m[++index]);
       prime = 2 * index + 3;
    } while (prime * prime <= sqrt(n));
 
@@ -106,17 +99,14 @@ int main(int argc, char *argv[])
                if (!((2 * ((LowVal - 3) / 2 + local_first) + 3 + first) % 2))
                   first = (first + prime) / 2;
                else
-               {
                   first = first / 2;
-               }
             }
          }
          for (i = first + local_first; i < first + local_first + BLOCK_SIZE && i < size; i = i + prime)
          {
             m[i] = 1;
          }
-         while (local_prime_m[++index])
-            ;
+         while (local_prime_m[++index])u;
          prime = 2 * index + 3;
       } while (prime * prime <= n);
    }
