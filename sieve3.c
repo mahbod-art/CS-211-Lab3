@@ -13,19 +13,19 @@ int main(int argc, char *argv[])
    unsigned long int first; /* Index of first multiple */
    int local_first;
    unsigned long int global_count = 0; /* Global prime count */
-   unsigned long long int high_value;  /* Highest value on this proc */
+   unsigned long long int HighVal;  /* Highest value on this proc */
    unsigned long int i;
    int id;                           /* Process ID number */
    unsigned long int index;          /* Index of current prime */
-   unsigned long long int low_value; /* Lowest value on this proc */
-   char *marked;                     /* Portion of 2,...,'n' */
-   char *local_prime_marked;
+   unsigned long long int LowVal; /* Lowest value on this proc */
+   char *m;                     /* Portion of 2,...,'n' */
+   char *local_prime_m;
    unsigned long long int n;     /* Sieving from 2, ..., 'n' */
    int p;                        /* Number of processes */
    unsigned long int proc0_size; /* Size of proc 0's subarray */
    unsigned long int prime;
    unsigned long int local_prime; /* Current prime */
-   unsigned long int size;        /* Elements in 'marked' */
+   unsigned long int size;        /* Elements in 'm' */
    int ca;
    unsigned long int local_prime_size;
 
@@ -48,22 +48,22 @@ int main(int argc, char *argv[])
 
    /* Add you code here  */
 
-   low_value = 2 * BLOCK_LOW(id, p, (n - 3) / 2 + 1) + 3;
-   if (low_value % 2 == 0)
+   LowVal = 2 * BLOCK_LOW(id, p, (n - 3) / 2 + 1) + 3;
+   if (LowVal % 2 == 0)
    {
-      low_value = low_value + 1;
+      LowVal = LowVal + 1;
    }
-   high_value = 2 * BLOCK_HIGH(id, p, (n - 3) / 2 + 1) + 3;
+   HighVal = 2 * BLOCK_HIGH(id, p, (n - 3) / 2 + 1) + 3;
 
-   if (high_value % 2 == 0)
+   if (HighVal % 2 == 0)
    {
-      high_value = high_value - 1;
+      HighVal = HighVal - 1;
    }
    size = ((id + 1) * ((n - 3) / 2 + 1) / (p)) - ((id) * ((n - 3) / 2 + 1) / (p));
 
-   marked = (char *)malloc(size);
+   m = (char *)malloc(size);
    index = 0;
-   if (marked == NULL)
+   if (m == NULL)
    {
       printf("Cannot allocate enough memory\n");
       MPI_Finalize();
@@ -72,17 +72,17 @@ int main(int argc, char *argv[])
    local_prime_size = ((sqrt(n) - 3) / 2) + 1;
    for (i = 0; i < size; i++)
    {
-      marked[i] = 0;
+      m[i] = 0;
    }
-   local_prime_marked = (char *)malloc(((sqrt(n) - 3) / 2) + 1);
+   local_prime_m = (char *)malloc(((sqrt(n) - 3) / 2) + 1);
    for (i = 0; i < local_prime_size; i++)
-      local_prime_marked[i] = 0;
+      local_prime_m[i] = 0;
    prime = 3;
    do
    {
       for (i = (prime * prime - 3) / 2; i < local_prime_size; i += prime)
-         local_prime_marked[i] = 1;
-      while (local_prime_marked[++index])
+         local_prime_m[i] = 1;
+      while (local_prime_m[++index])
          ;
       prime = 2 * index + 3;
    } while (prime * prime <= sqrt(n));
@@ -93,17 +93,17 @@ int main(int argc, char *argv[])
       prime = 3;
       do
       {
-         if (prime * prime > 2 * ((low_value - 3) / 2 + local_first) + 3)
-            first = (prime * prime - 3) / 2 - (2 * ((low_value - 3) / 2 + local_first)) / 2;
+         if (prime * prime > 2 * ((LowVal - 3) / 2 + local_first) + 3)
+            first = (prime * prime - 3) / 2 - (2 * ((LowVal - 3) / 2 + local_first)) / 2;
          else
          {
-            ca = (2 * ((low_value - 3) / 2 + local_first) + 3) % prime;
+            ca = (2 * ((LowVal - 3) / 2 + local_first) + 3) % prime;
             if (!ca)
                first = 0;
             else
             {
                first = prime - ca;
-               if (!((2 * ((low_value - 3) / 2 + local_first) + 3 + first) % 2))
+               if (!((2 * ((LowVal - 3) / 2 + local_first) + 3 + first) % 2))
                   first = (first + prime) / 2;
                else
                {
@@ -113,9 +113,9 @@ int main(int argc, char *argv[])
          }
          for (i = first + local_first; i < first + local_first + BLOCK_SIZE && i < size; i = i + prime)
          {
-            marked[i] = 1;
+            m[i] = 1;
          }
-         while (local_prime_marked[++index])
+         while (local_prime_m[++index])
             ;
          prime = 2 * index + 3;
       } while (prime * prime <= n);
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 
    count = 0;
    for (i = 0; i < size; i++)
-      if (!marked[i])
+      if (!m[i])
       {
          count++;
       }
