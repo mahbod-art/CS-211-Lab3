@@ -96,7 +96,6 @@ int main(int argc, char *argv[])
          while (m[++index]);
          prime = index * 2 + 3;
       }
-      /* the process 0 tells other what is the next prime*/
       MPI_Bcast(&prime, 1, MPI_INT, 0, MPI_COMM_WORLD);
    } while (prime * prime <= n);
 
