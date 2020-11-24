@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
-
+#define BLOCK_LOW(id, p, n) ((unsigned long long)(id) * (unsigned long long)(n) / (unsigned long long)(p))
 int main(int argc, char *argv[])
 {
    unsigned long int count;            /* Local prime count */
@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
    MPI_Comm_size(MPI_COMM_WORLD, &p);
    MPI_Barrier(MPI_COMM_WORLD);
    elapsed_time = -MPI_Wtime();
-
    if (argc != 2)
    {
       if (!id)
@@ -40,8 +39,6 @@ int main(int argc, char *argv[])
    }
 
    n = atoll(argv[1]);
-   /* Stop the timer */
-
    /* Add you code here  */
 
    proc0_size = (n - 1) / p;
@@ -54,6 +51,7 @@ int main(int argc, char *argv[])
    }
 
    low_value = 2 + BLOCK_LOW(id, p, n - 1);
+
    high_value = 2 + ((long int)(id + 1) * (long int)(n - 1) / (long int)p) - 1;
 
    if (low_value % 2 == 0)

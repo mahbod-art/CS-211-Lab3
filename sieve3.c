@@ -11,7 +11,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
-
+#define BLOCK_LOW(id, p, n) ((id) * (n) / (p))
+#define BLOCK_HIGH(id, p, n) (BLOCK_LOW((id) + 1, p, n) - 1)
+#define BLOCK_SIZE 15000
 int main(int argc, char *argv[])
 {
    unsigned long int count; /* Local prime count */
@@ -32,11 +34,10 @@ int main(int argc, char *argv[])
    unsigned long int prime;
    unsigned long int local_prime; /* Current prime */
    unsigned long int size;        /* Elements in 'marked' */
+   int ca;
    unsigned long int local_prime_size;
 
    MPI_Init(&argc, &argv);
-
-   /* Start the timer */
 
    MPI_Comm_rank(MPI_COMM_WORLD, &id);
    MPI_Comm_size(MPI_COMM_WORLD, &p);
@@ -52,14 +53,6 @@ int main(int argc, char *argv[])
    }
 
    n = atoll(argv[1]);
-
-   /* Figure out this process's share of the array, as
-      well as the integers represented by the first and
-      last array elements */
-
-   /* Stop the timer */
-
-   elapsed_time += MPI_Wtime();
 
    /* Add you code here  */
 
