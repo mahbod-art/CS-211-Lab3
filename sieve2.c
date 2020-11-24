@@ -11,8 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
-
-int main(int argc, char *argv[])
+#define BLOCK_LOW(id, p, n) ((unsigned long long)(id) * (unsigned long long)(n) / (unsigned long long)(p))
+main(int argc, char *argv[])
 {
    unsigned long int count; /* Local prime count */
    double elapsed_time;     /* Parallel execution time */
@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
       MPI_Finalize();
       exit(1);
    }
-
    n = atoll(argv[1]);
 
    /* Figure out this process's share of the array, as
@@ -124,7 +123,8 @@ int main(int argc, char *argv[])
       }
       for (i = first; i < size; i += prime)
          marked[i] = 1;
-      while (local_prime_marked[++index]);
+      while (local_prime_marked[++index])
+         ;
       prime = index * 2 + 3;
 
    } while (prime * prime <= n);
